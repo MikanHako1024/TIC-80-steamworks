@@ -1032,6 +1032,57 @@ static JSValue js_ffts(JSContext *ctx, JSValueConst this_val, s32 argc, JSValueC
     return JS_NewFloat64(ctx, core->api.ffts(tic, start_freq, end_freq));
 }
 
+static JSValue js_steam_init(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
+{
+    tic_core* core = getCore(ctx);
+    tic_mem* tic = (tic_mem*)core;
+
+    return JS_NewBool(ctx, core->api.steam_init(tic) ? 1 : 0);
+}
+
+static JSValue js_steam_sachi(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
+{
+    tic_core* core = getCore(ctx);
+    tic_mem* tic = (tic_mem*)core;
+
+    const char* name = JS_ToCString(ctx, argv[0]);
+    return JS_NewBool(ctx, core->api.steam_sachi(tic, name) ? 1 : 0);
+}
+
+static JSValue js_steam_gachi(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
+{
+    tic_core* core = getCore(ctx);
+    tic_mem* tic = (tic_mem*)core;
+
+    const char* name = JS_ToCString(ctx, argv[0]);
+    bool bAchieved = false;
+    bool bOk = core->api.steam_gachi(tic, name, &bAchieved);
+
+    JSValue arr = JS_NewArray(ctx);
+    JS_SetPropertyUint32(ctx, arr, 0, JS_NewBool(ctx, bOk));
+    JS_SetPropertyUint32(ctx, arr, 1, JS_NewBool(ctx, bAchieved));
+    return arr;
+}
+
+static JSValue js_steam_cachi(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
+{
+    tic_core* core = getCore(ctx);
+    tic_mem* tic = (tic_mem*)core;
+
+    const char* name = JS_ToCString(ctx, argv[0]);
+    return JS_NewBool(ctx, core->api.steam_cachi(tic, name) ? 1 : 0);
+}
+
+static JSValue js_steam_rachi(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
+{
+    tic_core* core = getCore(ctx);
+    tic_mem* tic = (tic_mem*)core;
+
+    bool bAchievementsToo = JS_ToBool(ctx, argv[0]);
+
+    return JS_NewBool(ctx, core->api.steam_rachi(tic, bAchievementsToo) ? 1 : 0);
+}
+
 static bool initJavascript(tic_mem* tic, const char* code)
 {
     closeJavascript(tic);

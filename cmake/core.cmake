@@ -30,6 +30,8 @@ set(TIC80CORE_SRC
     ${TIC80CORE_DIR}/ext/kiss_fft.c
     ${TIC80CORE_DIR}/ext/kiss_fftr.c
     ${TIC80CORE_DIR}/ext/png.c
+    ${TIC80CORE_DIR}/ext/csteamapi.c
+    ${TIC80CORE_DIR}/ext/steamapi.cpp
 )
 
 if(BUILD_DEPRECATED)
@@ -62,6 +64,22 @@ target_link_libraries(tic80core PRIVATE blipbuf)
 
 if(BUILD_WITH_ZLIB)
     target_link_libraries(tic80core PRIVATE zlib)
+endif()
+
+if(BUILD_WITH_STEAM)
+    target_include_directories(tic80core
+        PRIVATE
+            ${CMAKE_SOURCE_DIR}/include/redistributable_bin
+        PUBLIC
+            ${CMAKE_SOURCE_DIR}/include/steam
+            ${CMAKE_SOURCE_DIR}/include/redistributable_bin)
+
+    #if(WIN32)
+        #target_link_libraries(tic80core PRIVATE ${CMAKE_SOURCE_DIR}/include/steam/lib/win32/sdkencryptedappticket.lib)
+        target_link_libraries(tic80core PRIVATE ${CMAKE_SOURCE_DIR}/include/steam/lib/win64/sdkencryptedappticket64.lib)
+        #target_link_libraries(tic80core PRIVATE ${CMAKE_SOURCE_DIR}/include/redistributable_bin/steam_api.lib)
+        target_link_libraries(tic80core PRIVATE ${CMAKE_SOURCE_DIR}/include/redistributable_bin/win64/steam_api64.lib)
+    #endif()
 endif()
 
 if(BUILD_STATIC)

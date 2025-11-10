@@ -822,7 +822,63 @@ enum
         1,                                                                                                              \
         0,                                                                                                              \
         double,                                                                                                         \
-        tic_mem*, s32 startFreq, s32 endFreq)
+        tic_mem*, s32 startFreq, s32 endFreq)                                                                           \
+                                                                                                                        \
+                                                                                                                        \
+    macro(steam_init,                                                                                                   \
+        "steam_init() -> success",                                                                                      \
+                                                                                                                        \
+        "Init Steam API",                                                                                               \
+        0,                                                                                                              \
+        0,                                                                                                              \
+        0,                                                                                                              \
+        bool,                                                                                                           \
+        tic_mem*)                                                                                                       \
+                                                                                                                        \
+                                                                                                                        \
+    macro(steam_sachi,                                                                                                  \
+        "steam_sachi(name) -> success",                                                                                 \
+                                                                                                                        \
+        "Unlocks an achievement.",                                                                                      \
+        1,                                                                                                              \
+        1,                                                                                                              \
+        0,                                                                                                              \
+        bool,                                                                                                           \
+        tic_mem*, const char* pchName)                                                                                  \
+                                                                                                                        \
+                                                                                                                        \
+    macro(steam_gachi,                                                                                                  \
+        "steam_gachi(name) -> success achieved",                                                                        \
+                                                                                                                        \
+        "Gets the unlock status of the Achievement.",                                                                   \
+        1,                                                                                                              \
+        1,                                                                                                              \
+        0,                                                                                                              \
+        bool,                                                                                                           \
+        tic_mem*, const char* pchName, bool* pbAchieved)                                                                \
+                                                                                                                        \
+                                                                                                                        \
+    macro(steam_cachi,                                                                                                  \
+        "steam_cachi(name) -> success",                                                                                 \
+                                                                                                                        \
+        "Resets the unlock status of an achievement.",                                                                  \
+        1,                                                                                                              \
+        1,                                                                                                              \
+        0,                                                                                                              \
+        bool,                                                                                                           \
+        tic_mem*, const char* pchName)                                                                                  \
+                                                                                                                        \
+                                                                                                                        \
+    macro(steam_rachi,                                                                                                  \
+        "steam_rachi(achiToo) -> success",                                                                              \
+                                                                                                                        \
+        "Resets the current users stats and, optionally achievements (achiToo = true).",                                \
+        1,                                                                                                              \
+        1,                                                                                                              \
+        0,                                                                                                              \
+        bool,                                                                                                           \
+        tic_mem*, bool bAchievementsToo)
+
 
 #define TIC_API_DEF(name, _, __, ___, ____, _____, ret, ...) ret tic_api_##name(__VA_ARGS__);
 TIC_API_LIST(TIC_API_DEF)
