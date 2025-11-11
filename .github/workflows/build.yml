@@ -43,6 +43,15 @@ jobs:
           cmake -G "Visual Studio 17 2022" -DBUILD_SDLGPU=On -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_PRO=On -DBUILD_WITH_ALL=ON ..
           cmake --build . --config MinSizeRel --parallel
 
+      - name: Build Pro Steam
+        shell: cmd
+        run: |
+          cd build
+          cmake -G "Visual Studio 17 2022" -DBUILD_SDLGPU=On -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_PRO=On -DBUILD_WITH_ALL=ON ..
+          cmake --build . --config MinSizeRel --parallel
+          cp ../include/redistributable_bin/win64/steam_api64.dll ./bin/
+          echo 480 > ./bin/steam_appid.txt
+
   # === Windows MinGW-64 ===
   windows-mingw:
     runs-on: windows-latest

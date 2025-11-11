@@ -60,8 +60,6 @@ bool steamapi_InitAPI(void)
 
 //ISteamUserStats* m_pSteamUserStats = SteamUserStats();
 
-//SteamUser
-//SteamUserStats
 //RequestCurrentStats
 
 bool steamapi_SetAchievement(const char* pchName)
@@ -93,6 +91,31 @@ bool steamapi_ResetAllStats(bool bAchievementsToo)
     return ok;
 }
 
-// bool GetUserStat(CSteamID steamIDUser, const char *pchName, int32 *pData);
-// bool GetUserStat(CSteamID steamIDUser, const char* pchName, float* pData);
-// bool IndicateAchievementProgressconst char *pchName, uint32 nCurProgress, uint32 nMaxProgress£©;
+bool steamapi_SetStatN(const char* pchName, int nData)
+{
+    bool ok = SteamUserStats()->SetStat(pchName, nData);
+    SteamUserStats()->StoreStats();
+    return ok;
+}
+
+bool steamapi_SetStatF(const char* pchName, float fData)
+{
+    bool ok = SteamUserStats()->SetStat(pchName, fData);
+    SteamUserStats()->StoreStats();
+    return ok;
+}
+
+bool steamapi_GetStatN(const char* pchName, int* pnData)
+{
+    return SteamUserStats()->GetStat(pchName, pnData);
+}
+
+bool steamapi_GetStatF(const char* pchName, float* pfData)
+{
+    return SteamUserStats()->GetStat(pchName, pfData);
+}
+
+bool steamapi_IndicateAchiProgress(const char* pchName, unsigned int nCurProgress, unsigned int nMaxProgress)
+{
+    return SteamUserStats()->IndicateAchievementProgress(pchName, nCurProgress, nMaxProgress);
+}

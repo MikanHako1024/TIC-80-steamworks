@@ -57,6 +57,21 @@ static s32 getInteger2(JSContext *ctx, JSValueConst val, s32 defValue)
     return res;
 }
 
+static u32 getUInteger2(JSContext* ctx, JSValueConst val, u32 defValue)
+{
+    u32 res;
+    if (JS_IsUndefined(val))
+    {
+        res = defValue;
+    }
+    else
+    {
+        JS_ToUint32(ctx, &res, val);
+    }
+
+    return res;
+}
+
 static float getNumber(JSContext *ctx, JSValueConst val)
 {
     double res;
@@ -1037,50 +1052,98 @@ static JSValue js_steam_init(JSContext* ctx, JSValueConst this_val, s32 argc, JS
     tic_core* core = getCore(ctx);
     tic_mem* tic = (tic_mem*)core;
 
-    return JS_NewBool(ctx, core->api.steam_init(tic) ? 1 : 0);
+    return JS_NewBool(ctx, core->api.steam_init(tic));
 }
 
-static JSValue js_steam_sachi(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
-{
-    tic_core* core = getCore(ctx);
-    tic_mem* tic = (tic_mem*)core;
-
-    const char* name = JS_ToCString(ctx, argv[0]);
-    return JS_NewBool(ctx, core->api.steam_sachi(tic, name) ? 1 : 0);
-}
-
-static JSValue js_steam_gachi(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
+static JSValue js_steam_achi(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
 {
     tic_core* core = getCore(ctx);
     tic_mem* tic = (tic_mem*)core;
 
     const char* name = JS_ToCString(ctx, argv[0]);
     bool bAchieved = false;
-    bool bOk = core->api.steam_gachi(tic, name, &bAchieved);
-
-    JSValue arr = JS_NewArray(ctx);
-    JS_SetPropertyUint32(ctx, arr, 0, JS_NewBool(ctx, bOk));
-    JS_SetPropertyUint32(ctx, arr, 1, JS_NewBool(ctx, bAchieved));
-    return arr;
+    bool forGet = JS_IsUndefined(argv[1]);
+    if (forGet)
+    {
+        bool bOk = core->api.steam_achi(tic, name, forGet, &bAchieved);
+        JSValue arr = JS_NewArray(ctx);
+        JS_SetPropertyUint32(ctx, arr, 0, JS_NewBool(ctx, bOk));
+        JS_SetPropertyUint32(ctx, arr, 1, JS_NewBool(ctx, bAchieved));
+        return arr;
+    }
+    else
+    {
+        bAchieved = JS_ToBool(ctx, argv[1]);
+        return JS_NewBool(ctx, core->api.steam_achi(tic, name, forGet, &bAchieved));
+    }
 }
 
-static JSValue js_steam_cachi(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
+static JSValue js_steam_nstat(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
 {
     tic_core* core = getCore(ctx);
     tic_mem* tic = (tic_mem*)core;
 
     const char* name = JS_ToCString(ctx, argv[0]);
-    return JS_NewBool(ctx, core->api.steam_cachi(tic, name) ? 1 : 0);
+    s32 nData = 0;
+    bool forGet = JS_IsUndefined(argv[1]);
+    if (forGet)
+    {
+        bool bOk = core->api.steam_nstat(tic, name, forGet, &nData);
+        JSValue arr = JS_NewArray(ctx);
+        JS_SetPropertyUint32(ctx, arr, 0, JS_NewBool(ctx, bOk));
+        JS_SetPropertyUint32(ctx, arr, 1, JS_NewInt32(ctx, nData));
+        return arr;
+    }
+    else
+    {
+        nData = getInteger(ctx, argv[1]);
+        return JS_NewBool(ctx, core->api.steam_nstat(tic, name, forGet, &nData));
+    }
 }
 
-static JSValue js_steam_rachi(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
+static JSValue js_steam_fstat(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
+{
+    tic_core* core = getCore(ctx);
+    tic_mem* tic = (tic_mem*)core;
+
+    const char* name = JS_ToCString(ctx, argv[0]);
+    float fData = 0;
+    bool forGet = JS_IsUndefined(argv[1]);
+    if (forGet)
+    {
+        bool bOk = core->api.steam_fstat(tic, name, forGet, &fData);
+        JSValue arr = JS_NewArray(ctx);
+        JS_SetPropertyUint32(ctx, arr, 0, JS_NewBool(ctx, bOk));
+        JS_SetPropertyUint32(ctx, arr, 1, JS_NewFloat64(ctx, fData));
+        return arr;
+    }
+    else
+    {
+        fData = getNumber(ctx, argv[1]);
+        return JS_NewBool(ctx, core->api.steam_fstat(tic, name, forGet, &fData));
+    }
+}
+
+static JSValue js_steam_rstat(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
 {
     tic_core* core = getCore(ctx);
     tic_mem* tic = (tic_mem*)core;
 
     bool bAchievementsToo = JS_ToBool(ctx, argv[0]);
 
-    return JS_NewBool(ctx, core->api.steam_rachi(tic, bAchievementsToo) ? 1 : 0);
+    return JS_NewBool(ctx, core->api.steam_rstat(tic, bAchievementsToo));
+}
+
+static JSValue js_steam_achiProg(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
+{
+    tic_core* core = getCore(ctx);
+    tic_mem* tic = (tic_mem*)core;
+
+    const char* name = JS_ToCString(ctx, argv[0]);
+    u32 curProg = getUInteger2(ctx, argv[1], 0);
+    u32 maxProg = getUInteger2(ctx, argv[2], 1);
+
+    return JS_NewBool(ctx, core->api.steam_achiProg(tic, name, curProg, maxProg));
 }
 
 static bool initJavascript(tic_mem* tic, const char* code)
