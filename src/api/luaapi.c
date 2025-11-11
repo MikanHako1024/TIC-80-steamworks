@@ -1595,6 +1595,128 @@ static s32 lua_ffts(lua_State* lua)
     return 0;
 }
 
+static s32 lua_steam_init(lua_State* lua)
+{
+    tic_core* core = getLuaCore(lua);
+    tic_mem* tic = (tic_mem*)getLuaCore(lua);
+
+    lua_pushboolean(lua, core->api.steam_init(tic));
+    return 1;
+}
+
+static s32 lua_steam_achi(lua_State* lua)
+{
+    s32 top = lua_gettop(lua);
+    tic_core* core = getLuaCore(lua);
+    tic_mem* tic = (tic_mem*)core;
+
+    if (top >= 1)
+    {
+        const char* name = printString(lua, 1);
+        bool bAchieved = false;
+        bool forGet = top < 2;
+        if (forGet)
+        {
+            lua_pushboolean(lua, core->api.steam_achi(tic, name, forGet, &bAchieved));
+            lua_pushboolean(lua, bAchieved);
+            return 2;
+        }
+        else
+        {
+            bAchieved = lua_toboolean(lua, 2);
+            lua_pushboolean(lua, core->api.steam_achi(tic, name, forGet, &bAchieved));
+            return 1;
+        }
+    }
+    return 0;
+}
+
+static s32 lua_steam_nstat(lua_State* lua)
+{
+    s32 top = lua_gettop(lua);
+    tic_core* core = getLuaCore(lua);
+    tic_mem* tic = (tic_mem*)core;
+
+    if (top >= 1)
+    {
+        const char* name = printString(lua, 1);
+        s32 nData = 0;
+        bool forGet = top < 2;
+        if (forGet)
+        {
+            lua_pushboolean(lua, core->api.steam_nstat(tic, name, forGet, &nData));
+            lua_pushnumber(lua, nData);
+            return 2;
+        }
+        else
+        {
+            nData = getLuaNumber(lua, 2);
+            lua_pushboolean(lua, core->api.steam_nstat(tic, name, forGet, &nData));
+            return 1;
+        }
+    }
+    return 0;
+}
+
+static s32 lua_steam_fstat(lua_State* lua)
+{
+    s32 top = lua_gettop(lua);
+    tic_core* core = getLuaCore(lua);
+    tic_mem* tic = (tic_mem*)core;
+
+    if (top >= 1)
+    {
+        const char* name = printString(lua, 1);
+        float fData = 0;
+        bool forGet = top < 2;
+        if (forGet)
+        {
+            lua_pushboolean(lua, core->api.steam_fstat(tic, name, forGet, &fData));
+            lua_pushnumber(lua, fData);
+            return 2;
+        }
+        else
+        {
+            fData = getLuaNumber(lua, 2);
+            lua_pushboolean(lua, core->api.steam_fstat(tic, name, forGet, &fData));
+            return 1;
+        }
+    }
+    return 0;
+}
+
+static s32 lua_steam_rstat(lua_State* lua)
+{
+    s32 top = lua_gettop(lua);
+    tic_core* core = getLuaCore(lua);
+    tic_mem* tic = (tic_mem*)core;
+
+    if (top >= 1)
+    {
+        bool bAchievementsToo = lua_toboolean(lua, 1);
+        lua_pushboolean(lua, core->api.steam_rstat(tic, bAchievementsToo));
+        return 1;
+    }
+    return 0;
+}
+
+static s32 lua_steam_achiProg(lua_State* lua)
+{
+    s32 top = lua_gettop(lua);
+    tic_core* core = getLuaCore(lua);
+    tic_mem* tic = (tic_mem*)core;
+
+    if (top >= 3)
+    {
+        const char* name = printString(lua, 1);
+        u32 curProg = getLuaNumber(lua, 2);
+        u32 maxProg = getLuaNumber(lua, 3);
+        lua_pushboolean(lua, core->api.steam_achiProg(tic, name, curProg, maxProg));
+        return 1;
+    }
+    return 0;
+}
+
 static int lua_dofile(lua_State *lua)
 {
     luaL_error(lua, "unknown method: \"dofile\"\n");

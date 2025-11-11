@@ -1065,9 +1065,8 @@ static JSValue js_steam_achi(JSContext* ctx, JSValueConst this_val, s32 argc, JS
     bool forGet = JS_IsUndefined(argv[1]);
     if (forGet)
     {
-        bool bOk = core->api.steam_achi(tic, name, forGet, &bAchieved);
         JSValue arr = JS_NewArray(ctx);
-        JS_SetPropertyUint32(ctx, arr, 0, JS_NewBool(ctx, bOk));
+        JS_SetPropertyUint32(ctx, arr, 0, JS_NewBool(ctx, core->api.steam_achi(tic, name, forGet, &bAchieved)));
         JS_SetPropertyUint32(ctx, arr, 1, JS_NewBool(ctx, bAchieved));
         return arr;
     }
@@ -1088,9 +1087,8 @@ static JSValue js_steam_nstat(JSContext* ctx, JSValueConst this_val, s32 argc, J
     bool forGet = JS_IsUndefined(argv[1]);
     if (forGet)
     {
-        bool bOk = core->api.steam_nstat(tic, name, forGet, &nData);
         JSValue arr = JS_NewArray(ctx);
-        JS_SetPropertyUint32(ctx, arr, 0, JS_NewBool(ctx, bOk));
+        JS_SetPropertyUint32(ctx, arr, 0, JS_NewBool(ctx, core->api.steam_nstat(tic, name, forGet, &nData)));
         JS_SetPropertyUint32(ctx, arr, 1, JS_NewInt32(ctx, nData));
         return arr;
     }
@@ -1111,9 +1109,8 @@ static JSValue js_steam_fstat(JSContext* ctx, JSValueConst this_val, s32 argc, J
     bool forGet = JS_IsUndefined(argv[1]);
     if (forGet)
     {
-        bool bOk = core->api.steam_fstat(tic, name, forGet, &fData);
         JSValue arr = JS_NewArray(ctx);
-        JS_SetPropertyUint32(ctx, arr, 0, JS_NewBool(ctx, bOk));
+        JS_SetPropertyUint32(ctx, arr, 0, JS_NewBool(ctx, core->api.steam_fstat(tic, name, forGet, &fData)));
         JS_SetPropertyUint32(ctx, arr, 1, JS_NewFloat64(ctx, fData));
         return arr;
     }

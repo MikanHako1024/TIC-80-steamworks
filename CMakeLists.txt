@@ -156,7 +156,7 @@ include(cmake/zip.cmake)
 include(cmake/png.cmake)
 include(cmake/tools.cmake)
 
-#include(cmake/lua.cmake)
+include(cmake/lua.cmake)
 #include(cmake/moon.cmake)
 #include(cmake/yue.cmake)
 #include(cmake/fennel.cmake)
