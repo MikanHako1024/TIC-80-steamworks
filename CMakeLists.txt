@@ -82,8 +82,8 @@ message("BUILD_WITH_STEAM: ${BUILD_WITH_STEAM}")
 if (BUILD_WITH_STEAM)
 	add_compile_definitions(BUILD_WITH_STEAM)
 
-    option(LOCAL_SERVER_PORT 3000)
-    message("Building with local server port: ${LOCAL_SERVER_PORT}")
+    set(LOCAL_SERVER_PORT "3000" CACHE STRING "Local server port")
+    message("Building with Local server port: ${LOCAL_SERVER_PORT}")
 endif()
 
 if (NINTENDO_3DS)
