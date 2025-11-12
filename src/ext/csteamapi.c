@@ -51,7 +51,7 @@ bool tic_api_steam_rstat(tic_mem* memory, bool bAchievementsToo)
     return steamapi_ResetAllStats(bAchievementsToo);
 }
 
-bool tic_api_steam_achiProg(tic_mem* memory, const char* pchName, u32 nCurProgress, u32 nMaxProgress)
+bool tic_api_steam_prog(tic_mem* memory, const char* pchName, u32 nCurProgress, u32 nMaxProgress)
 {
     return steamapi_IndicateAchiProgress(pchName, nCurProgress, nMaxProgress);
 }

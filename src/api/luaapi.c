@@ -1702,7 +1702,7 @@ static s32 lua_steam_rstat(lua_State* lua)
     return 0;
 }
 
-static s32 lua_steam_achiProg(lua_State* lua)
+static s32 lua_steam_prog(lua_State* lua)
 {
     s32 top = lua_gettop(lua);
     tic_core* core = getLuaCore(lua);
@@ -1713,7 +1713,7 @@ static s32 lua_steam_achiProg(lua_State* lua)
         const char* name = printString(lua, 1);
         u32 curProg = getLuaNumber(lua, 2);
         u32 maxProg = getLuaNumber(lua, 3);
-        lua_pushboolean(lua, core->api.steam_achiProg(tic, name, curProg, maxProg));
+        lua_pushboolean(lua, core->api.steam_prog(tic, name, curProg, maxProg));
         return 1;
     }
     return 0;

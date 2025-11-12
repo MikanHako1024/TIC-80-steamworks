@@ -63,28 +63,32 @@ const lineFuncs = [
 	()=>steam_fstat(ACHS.TRAVELED.key,ACHS.TRAVELED.stat+5),
 	()=>steam_fstat(ACHS.TRAVELED.key,ACHS.TRAVELED.stat-3),
 	()=>{},
-	()=>steam_achiProg(ACHS.TRAVEL_ACCUM.key),
+	()=>steam_prog(ACHS.TRAVEL_ACCUM.key),
 ]
 
 let lastResult=undefined
 let page=0
 function draw() {
+	cls(14)
+
 	const c1=5
 	const c2=6
+	const c3=3
+	const c4=4
 	const lh=6
 	let tx,ty
 
 	tx=2
 	ty=2-lh
-	print(`Current Achievements:`,tx,ty+=lh,c1)
-	print(`${ACHS.WIN_ONE.active?ACHS.WIN_ONE.key:''}`,tx,ty+=lh,c1)
-	print(`${ACHS.TRAVEL_ACCUM.active?ACHS.TRAVEL_ACCUM.key:''}`,tx,ty+=lh,c1)
+	print(`Current Achievements:`,tx,ty+=lh,c3)
+	print(`${ACHS.WIN_ONE.active?ACHS.WIN_ONE.key:''}`,tx,ty+=lh,c4)
+	print(`${ACHS.TRAVEL_ACCUM.active?ACHS.TRAVEL_ACCUM.key:''}`,tx,ty+=lh,c4)
 
 	tx=2+140
 	ty=2-lh
-	print(`Current Stats:`,tx,ty+=lh,c1)
-	print(`${ACHS.NUM_GAMES.stat}`,tx,ty+=lh,c1)
-	print(`${ACHS.TRAVELED.stat}`,tx,ty+=lh,c1)
+	print(`Current Stats:`,tx,ty+=lh,c3)
+	print(`${ACHS.NUM_GAMES.stat}`,tx,ty+=lh,c4)
+	print(`${ACHS.TRAVELED.stat}`,tx,ty+=lh,c4)
 
 	tx=2
 	ty=2+lh*3-lh
@@ -108,7 +112,7 @@ function draw() {
 		['T', '20', 'Set Stat Value+5 (float)', `steam_fstat("${ACHS.TRAVELED.key}",val+5)`],
 		['Y', '25', 'Set Stat Value-3 (float)', `steam_fstat("${ACHS.TRAVELED.key}",val-3)`],
 		[],
-		['P', '16', 'Pop-up Progress of Achievement', `steam_achiProg("${ACHS.TRAVEL_ACCUM.key}",cur,5280)`],
+		['P', '16', 'Pop-up Progress of Achievement', `steam_prog("${ACHS.TRAVEL_ACCUM.key}",cur,5280)`],
 	]
 	lines.forEach(a=>{a.length>0&&(a[4]=`${a[0]}(${a[1]}) : ${a[2]}\n  ${a[3]}`)})
 
@@ -116,7 +120,7 @@ function draw() {
 	const iend=page?lines.length:10
 
 	ty+=lh
-	var w0=print(`Commands:`,tx,ty,c1)
+	var w0=print(`Commands:`,tx,ty,c3)
 	var w1=print('PageUp(54)',tx+w0+10,ty,key(54)?c2:c1)
 	var w2=print(' / ',tx+w0+10+w1,ty,c1)
 	print('PageDown(55)',tx+w0+10+w1+w2,ty,key(55)?c2:c1)
@@ -143,7 +147,7 @@ function draw() {
 
 	ty+=2
 	ty+=lh
-	var w0=print(`Last Result: `,tx,ty,c1)
+	var w0=print(`Last Result: `,tx,ty,c3)
 	if (lastResult) {
 		print(lastResult,tx+w0,ty,c2)
 	}
@@ -159,7 +163,6 @@ function BOOT()
 
 function TIC()
 {
-	cls(13)
 	draw()
 }
 

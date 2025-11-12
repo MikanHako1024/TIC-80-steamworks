@@ -1133,7 +1133,7 @@ static JSValue js_steam_rstat(JSContext* ctx, JSValueConst this_val, s32 argc, J
     return JS_NewBool(ctx, core->api.steam_rstat(tic, bAchievementsToo));
 }
 
-static JSValue js_steam_achiProg(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
+static JSValue js_steam_prog(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
 {
     tic_core* core = getCore(ctx);
     tic_mem* tic = (tic_mem*)core;
@@ -1142,7 +1142,7 @@ static JSValue js_steam_achiProg(JSContext* ctx, JSValueConst this_val, s32 argc
     u32 curProg = getUInteger2(ctx, argv[1], 0);
     u32 maxProg = getUInteger2(ctx, argv[2], 1);
 
-    return JS_NewBool(ctx, core->api.steam_achiProg(tic, name, curProg, maxProg));
+    return JS_NewBool(ctx, core->api.steam_prog(tic, name, curProg, maxProg));
 }
 
 #endif

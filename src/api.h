@@ -893,8 +893,8 @@ enum
         tic_mem*, bool bAchievementsToo)                                                                                \
                                                                                                                         \
                                                                                                                         \
-    macro(steam_achiProg,                                                                                               \
-        "steam_achiProg(name, curProg, maxProg) -> success",                                                            \
+    macro(steam_prog,                                                                                                   \
+        "steam_prog(name, curProg, maxProg) -> success",                                                                \
                                                                                                                         \
         "Shows the user a pop-up notification with the current progress of an achievement.",                            \
         3,                                                                                                              \

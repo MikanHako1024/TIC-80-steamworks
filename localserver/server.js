@@ -15,10 +15,10 @@ app.listen(PORT, () => {
 });
 
 function downloadWin(res) {
-	const filename = path.join(__dirname, BUILD_DIR, WIN_EXE_FILENAME);
+	const filename = path.join(__dirname, BUILD_DIR, DOWNLOAD_FILENAME);
 	const rs = fs.createReadStream(filename);
 	res.setHeader('Content-Type', 'application/octet-stream');
-	res.setHeader('Content-Disposition', `attachment; filename="${WIN_EXE_FILENAME}"`);
+	res.setHeader('Content-Disposition', `attachment; filename="${DOWNLOAD_FILENAME}"`);
 	rs.pipe(res);
 }
 
@@ -35,5 +35,9 @@ app.get('/export/*/winjs', (req, res) => {
 });
 
 app.get('/export/*/*', (req, res) => {
+    console.log(`Unknown GET ${req.originalUrl}`);
+});
+
+app.get('/export/*', (req, res) => {
     console.log(`Unknown GET ${req.originalUrl}`);
 });
