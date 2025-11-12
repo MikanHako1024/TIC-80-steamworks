@@ -1,6 +1,20 @@
-# Import Steamworks SDK
+# Build instructions
 
-## Import to project
+Based on the [basic build](README.md#build-instructions)
+
+1. [Import Steamworks SDK](#import-steamworks-sdk)
+2. `cmake -G` with `-DBUILD_WITH_STEAM=On`
+```
+cmake -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=MinSizeRel -DBUILD_SDLGPU=On -DBUILD_WITH_ALL=On -DBUILD_WITH_STEAM=On ..
+```
+3. Build
+```
+cmake --build . --config MinSizeRel --parallel
+```
+4. [Import dll to bin](#import-dll-to-bin) (Once)
+5. [Set Steam AppID](#set-steam-appid) (Only dev)
+
+## Import Steamworks SDK
 
 1. [Download](https://partner.steamgames.com/downloads/steamworks_sdk.zip) SDK from [Steamworks](https://partner.steamgames.com/doc/sdk)
 2. Unzip
@@ -16,7 +30,6 @@
     |- steam_api.dll
     |- steam_api.lib
     |- ...
-
   |- steam
     |- lib
       |- win32
@@ -29,10 +42,9 @@
     |- ...
 ```
 
-## Import to build
+## Import dll to bin
 
-1. Build tic80
-2. Copy file `[SDKdir]/sdk/redistributable_bin/steam_api64.dll` to `[Tic80dir]/build/bin/`
+Copy file `[SDKdir]/sdk/redistributable_bin/steam_api64.dll` to `[Tic80dir]/build/bin/`
 
 ```
 [Tic80dir]
@@ -42,3 +54,15 @@
     |- steam_api64.dll
     |- ...
 ```
+
+## Set Steam AppID
+
+For dev, you can create file `steam_appid.txt` in `[Tic80dir]/build/bin`, and write `480` to the file.
+
+This way you can test the SteamAPIs with Steamworks example application (SpaceWar).
+
+Also, you can test your own game, just use your AppID instead.
+
+**Important**: When you ship your own game through Steam this file will not be needed as Steam will auto-detect your AppID when the game is launched.
+
+[Learn more](https://partner.steamgames.com/doc/sdk/api/example)
