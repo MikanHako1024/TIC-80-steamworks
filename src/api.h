@@ -825,6 +825,10 @@ enum
         tic_mem*, s32 startFreq, s32 endFreq)                                                                           \
                                                                                                                         \
                                                                                                                         \
+    TIC_STEAM_API_LIST(macro)
+
+#if defined(BUILD_WITH_STEAM)
+#define TIC_STEAM_API_LIST(macro)                                                                                       \
     macro(steam_init,                                                                                                   \
         "steam_init() -> success",                                                                                      \
                                                                                                                         \
@@ -898,6 +902,9 @@ enum
         0,                                                                                                              \
         bool,                                                                                                           \
         tic_mem*, const char* pchName, u32 curProg, u32 maxProg)
+#else
+#define TIC_STEAM_API_LIST(macro)
+#endif
 
 
 #define TIC_API_DEF(name, _, __, ___, ____, _____, ret, ...) ret tic_api_##name(__VA_ARGS__);

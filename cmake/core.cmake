@@ -30,12 +30,17 @@ set(TIC80CORE_SRC
     ${TIC80CORE_DIR}/ext/kiss_fft.c
     ${TIC80CORE_DIR}/ext/kiss_fftr.c
     ${TIC80CORE_DIR}/ext/png.c
-    ${TIC80CORE_DIR}/ext/csteamapi.c
-    ${TIC80CORE_DIR}/ext/steamapi.cpp
 )
 
 if(BUILD_DEPRECATED)
     set(TIC80CORE_SRC ${TIC80CORE_SRC} ${TIC80CORE_DIR}/ext/gif.c)
+endif()
+
+if(BUILD_WITH_STEAM)
+    set(TIC80CORE_SRC ${TIC80CORE_SRC}
+        ${TIC80CORE_DIR}/ext/csteamapi.c
+        ${TIC80CORE_DIR}/ext/steamapi.cpp
+)
 endif()
 
 add_library(tic80core STATIC ${TIC80CORE_SRC})
@@ -69,17 +74,16 @@ endif()
 if(BUILD_WITH_STEAM)
     target_include_directories(tic80core
         PRIVATE
-            ${CMAKE_SOURCE_DIR}/include/redistributable_bin
-        PUBLIC
             ${CMAKE_SOURCE_DIR}/include/steam
             ${CMAKE_SOURCE_DIR}/include/redistributable_bin)
 
-    #if(WIN32)
-        #target_link_libraries(tic80core PRIVATE ${CMAKE_SOURCE_DIR}/include/steam/lib/win32/sdkencryptedappticket.lib)
+    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
         target_link_libraries(tic80core PRIVATE ${CMAKE_SOURCE_DIR}/include/steam/lib/win64/sdkencryptedappticket64.lib)
-        #target_link_libraries(tic80core PRIVATE ${CMAKE_SOURCE_DIR}/include/redistributable_bin/steam_api.lib)
         target_link_libraries(tic80core PRIVATE ${CMAKE_SOURCE_DIR}/include/redistributable_bin/win64/steam_api64.lib)
-    #endif()
+    else()
+        target_link_libraries(tic80core PRIVATE ${CMAKE_SOURCE_DIR}/include/steam/lib/win32/sdkencryptedappticket.lib)
+        target_link_libraries(tic80core PRIVATE ${CMAKE_SOURCE_DIR}/include/redistributable_bin/steam_api.lib)
+    endif()
 endif()
 
 if(BUILD_STATIC)

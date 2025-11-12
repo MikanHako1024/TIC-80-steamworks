@@ -1047,6 +1047,8 @@ static JSValue js_ffts(JSContext *ctx, JSValueConst this_val, s32 argc, JSValueC
     return JS_NewFloat64(ctx, core->api.ffts(tic, start_freq, end_freq));
 }
 
+#if defined(BUILD_WITH_STEAM)
+
 static JSValue js_steam_init(JSContext* ctx, JSValueConst this_val, s32 argc, JSValueConst* argv)
 {
     tic_core* core = getCore(ctx);
@@ -1142,6 +1144,8 @@ static JSValue js_steam_achiProg(JSContext* ctx, JSValueConst this_val, s32 argc
 
     return JS_NewBool(ctx, core->api.steam_achiProg(tic, name, curProg, maxProg));
 }
+
+#endif
 
 static bool initJavascript(tic_mem* tic, const char* code)
 {

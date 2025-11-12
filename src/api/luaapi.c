@@ -1595,6 +1595,8 @@ static s32 lua_ffts(lua_State* lua)
     return 0;
 }
 
+#if defined(BUILD_WITH_STEAM)
+
 static s32 lua_steam_init(lua_State* lua)
 {
     tic_core* core = getLuaCore(lua);
@@ -1716,6 +1718,8 @@ static s32 lua_steam_achiProg(lua_State* lua)
     }
     return 0;
 }
+
+#endif
 
 static int lua_dofile(lua_State *lua)
 {

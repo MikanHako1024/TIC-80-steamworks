@@ -68,6 +68,5 @@ if(BUILD_EDITORS)
 endif()
 
 if(BUILD_WITH_STEAM)
-    target_compile_definitions(tic80studio PUBLIC TIC_BUILD_STEAMAPI)
-    target_compile_definitions(tic80studio PUBLIC TIC_LOCAL_SERVER=\"localhost:3000\")
+    target_compile_definitions(tic80studio PUBLIC TIC_LOCAL_SERVER=\"localhost:${LOCAL_SERVER_PORT}\")
 endif()
