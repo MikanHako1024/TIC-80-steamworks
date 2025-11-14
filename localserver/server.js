@@ -5,39 +5,60 @@ const fs = require('fs');
 const app = express();
 const PORT = 3000;
 
-const BUILD_DIR = '../build/bin/';
-const WIN_EXE_FILENAME = 'tic80.exe';
-const WIN_ZIP_FILENAME = 'tic80-export.zip';
-const DOWNLOAD_FILENAME = WIN_EXE_FILENAME;
+const RESOURCE_DIR = '../resources/';
+const FILE_EXTENSION = '.exe';
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+	console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-function downloadWin(res) {
-	const filename = path.join(__dirname, BUILD_DIR, DOWNLOAD_FILENAME);
-	const rs = fs.createReadStream(filename);
-	res.setHeader('Content-Type', 'application/octet-stream');
-	res.setHeader('Content-Disposition', `attachment; filename="${DOWNLOAD_FILENAME}"`);
-	rs.pipe(res);
+function makeFilename(version, target) {
+	return `${target}${FILE_EXTENSION}`;
+}
+
+function makeFullname(version, target) {
+	const versionDir = `${version}`;
+	const filename = makeFilename(version, target);
+	return path.join(__dirname, RESOURCE_DIR, versionDir, filename);
+}
+
+function downloadFile(res, version, target) {
+	const filename = makeFilename(version, target);
+	const fullname = makeFullname(version, target);
+	if (fs.existsSync(fullname) && fs.statSync(fullname).isFile()) {
+		const rs = fs.createReadStream(fullname);
+		res.setHeader('Content-Type', 'application/octet-stream');
+		res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+		rs.pipe(res);
+		rs.on('error', (error) => {
+			if (!res.headersSent) {
+				res.status(500);
+			}
+		});
+		res.on('error', (error) => {
+			console.error('ReadStream Error:', error);
+			rs.destroy();
+		});
+		res.on('close', () => {
+			rs.destroy();
+		});
+		return true;
+	}
+	else {
+		console.warn(`  Don't found file "${makeFullname(version, target)}"`);
+		res.sendStatus(400);
+	}
 }
 
 // tic80.com/exports/<VERSION>/<TARGET>
-// any <VERSION> for latest version
-app.get('/export/*/win', (req, res) => {
-    console.log(`GET ${req.originalUrl}`);
-	downloadWin(res);
-});
-
-app.get('/export/*/winjs', (req, res) => {
-    console.log(`GET ${req.originalUrl}`);
-	downloadWin(res);
-});
-
-app.get('/export/*/*', (req, res) => {
-    console.log(`Unknown GET ${req.originalUrl}`);
+app.get('/export/:version/:target', (req, res) => {
+	const version = req.params.version || '';
+	const target = req.params.target || '';
+	console.log(`GET ${req.originalUrl} : Version="${version}", Target="${target}"`);
+	downloadFile(res, version, target);
 });
 
 app.get('/export/*', (req, res) => {
-    console.log(`Unknown GET ${req.originalUrl}`);
+	console.log(`GET ${req.originalUrl}: Unknown Get`);
+	res.sendStatus(400);
 });
