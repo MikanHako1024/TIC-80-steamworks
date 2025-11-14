@@ -66,3 +66,61 @@ Also, you can test your own game, just use your AppID instead.
 **Important**: When you ship your own game through Steam this file will not be needed as Steam will auto-detect your AppID when the game is launched.
 
 [Learn more](https://partner.steamgames.com/doc/sdk/api/example)
+
+
+
+# Export instructions
+
+If you build with `-DBUILD_WITH_STEAM=On`, when you export game, the resource files will be downloaded from `localhost:3000` instead of `tic80.com`
+
+1. [Build download resources](#build-download-resources)
+2. [Run local server](#run-local-server)
+3. Export by tic80 command
+
+## Build download resources
+
+### export win alone=0
+
+Based on the [basic build](README.md#build-instructions)
+
+Build with
+```
+-DBUILD_WITH_STEAM=On -DBUILD_EDITORS=OFF -DBUILD_WITH_ALL=ON
+```
+
+Then copy file and rename `build/bin/tic80.exe` to `resources/1.2-dev/win.exe`
+
+### export win alone=1
+
+Based on the [basic build](README.md#build-instructions)
+
+1. Build with
+```
+-DBUILD_WITH_STEAM=On -DBUILD_EDITORS=OFF -DBUILD_WITH_ALL=OFF
+```
+and
+```
+-DBUILD_WITH_LUA=ON
+```
+(Depending on the language your cart is based on)
+
+2. Then copy and rename the file `build/bin/tic80.exe` to `resources/1.2-dev/winlua.exe` (Depending on the language your cart is based on)
+
+| Platform | Language   | Build option | resource name |
+| -------- | ---------- | ------------ | ------------- |
+| Windows  | Lua        |`-DBUILD_WITH_LUA=ON` | `winlua.exe` |
+| Windows  | Javascript | `-DBUILD_WITH_JS=ON` | `winjs.exe` |
+
+## Run local server
+
+### Install
+```
+cd localserver
+npm install
+```
+
+### Run
+```
+cd localserver
+node ./server.js
+```
